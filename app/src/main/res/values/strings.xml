@@ -2,5 +2,9 @@
     <string name="app_name">YouTubeParser</string>
     <string name="video_desc"><![CDATA[Emotional Well-being & Healing \n Practices for Children]]></string>
     <string name="amount_vid">32 video series</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="internetConnection">No Internet Connection</string>
+    <string name="try_again" >Try again</string>
 
 </resources>

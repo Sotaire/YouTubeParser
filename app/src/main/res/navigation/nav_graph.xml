@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_grapg"
+    app:startDestination="@id/playlistFragment">
+
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.tilek.youtubeparser.ui.playlists.PlaylistFragment"
+        android:label="playlist_fragment"
+        tools:layout="@layout/playlist_fragment" >
+        <action
+            android:id="@+id/action_playlistFragment_to_noInternetFragment"
+            app:destination="@id/noInternetFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.tilek.youtubeparser.ui.details.DetailsFragment"
+        android:label="details_fragment"
+        tools:layout="@layout/details_fragment" />
+    <fragment
+        android:id="@+id/noInternetFragment"
+        android:name="com.tilek.youtubeparser.ui.noInternet.NoInternetFragment"
+        android:label="fragment_no_internet"
+        tools:layout="@layout/fragment_no_internet" >
+        <action
+            android:id="@+id/action_noInternetFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
+    </fragment>
+</navigation>

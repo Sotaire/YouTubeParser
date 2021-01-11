@@ -6,15 +6,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.tilek.youtubeparser.R
+import com.tilek.youtubeparser.data.models.PlaylistItem
+import com.tilek.youtubeparser.data.network.Status
+import com.tilek.youtubeparser.extensions.loadImage
+import com.tilek.youtubeparser.ui.details.adapter.DetailAdapter
+import com.tilek.youtubeparser.ui.playlists.PlaylistFragment
+import com.tilek.youtubeparser.ui.playlists.playlistAdapter.OnPlaylistClickListener
+import kotlinx.android.synthetic.main.details_fragment.*
 
-class DetailsFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = DetailsFragment()
-    }
+class DetailsFragment : Fragment(), OnPlaylistClickListener{
 
     private lateinit var viewModel: DetailsViewModel
+    private lateinit var videoList : PlaylistItem
+    private lateinit var adapter : DetailAdapter
+    private var nextPageToken: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            videoList = it.getSerializable(PlaylistFragment.PLAYLIST_ITEM) as PlaylistItem
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +40,33 @@ class DetailsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
-        // TODO: Use the ViewModel
+        initView()
+        initRecycler()
+        fetchData()
+    }
+
+    private fun initView() {
+        image_view.loadImage(videoList.snippet?.thumbnails?.medium?.url,1)
+    }
+
+    private fun initRecycler() {
+        adapter = DetailAdapter(this)
+        video_list_recycler.adapter = adapter
+    }
+
+    private fun fetchData() {
+        viewModel.getVideoListFromPlaylist(videoList.id.toString()).observe(viewLifecycleOwner, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    it?.data?.items?.let { it1 -> adapter.add(it1) }
+                    nextPageToken = it?.data?.nextPageToken
+                }
+            }
+        })
+    }
+
+    override fun onClick(item: PlaylistItem) {
+
     }
 
 }

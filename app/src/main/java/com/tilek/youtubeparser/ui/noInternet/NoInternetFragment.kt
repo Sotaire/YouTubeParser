@@ -29,7 +29,7 @@ class NoInternetFragment : Fragment() {
     private fun isOnline() {
         btn_try_again.setOnClickListener {
             if (isInternetConnected(getConnectivityManager(requireContext()))){
-                findNavController().navigate(R.id.action_noInternetFragment_to_playlistFragment)
+                findNavController().navigateUp()
             }else{
                 context?.showToast("No internet")
             }

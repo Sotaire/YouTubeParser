@@ -13,12 +13,19 @@
         <action
             android:id="@+id/action_playlistFragment_to_noInternetFragment"
             app:destination="@id/noInternetFragment" />
+        <action
+            android:id="@+id/action_playlistFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.tilek.youtubeparser.ui.details.DetailsFragment"
         android:label="details_fragment"
-        tools:layout="@layout/details_fragment" />
+        tools:layout="@layout/details_fragment" >
+        <action
+            android:id="@+id/action_detailsFragment_to_noInternetFragment"
+            app:destination="@id/noInternetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/noInternetFragment"
         android:name="com.tilek.youtubeparser.ui.noInternet.NoInternetFragment"
@@ -27,5 +34,8 @@
         <action
             android:id="@+id/action_noInternetFragment_to_playlistFragment"
             app:destination="@id/playlistFragment" />
+        <action
+            android:id="@+id/action_noInternetFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
 </navigation>

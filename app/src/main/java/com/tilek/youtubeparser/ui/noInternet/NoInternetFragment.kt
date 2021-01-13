@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.navigateUp
 import com.tilek.youtubeparser.R
 import com.tilek.youtubeparser.extensions.getConnectivityManager
 import com.tilek.youtubeparser.extensions.isInternetConnected
@@ -16,6 +17,10 @@ import kotlinx.android.synthetic.main.fragment_no_internet.*
 
 class NoInternetFragment : Fragment() {
 
+    companion object {
+        const val OFFLINE_STATE = "offline_state"
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_no_internet, container, false)
@@ -24,6 +29,15 @@ class NoInternetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         isOnline()
+        offline()
+    }
+
+    private fun offline() {
+        btn_offline.setOnClickListener {
+            var bundle = Bundle()
+            bundle.putBoolean(OFFLINE_STATE,true)
+            findNavController().navigate(R.id.action_noInternetFragment_to_playlistFragment,bundle)
+        }
     }
 
     private fun isOnline() {

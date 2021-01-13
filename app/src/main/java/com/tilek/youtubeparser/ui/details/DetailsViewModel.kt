@@ -14,8 +14,8 @@ class DetailsViewModel : ViewModel() {
         return repository.getVideoListFromPlaylist(videoListId)
     }
 
-    fun getNextVideoListFromPlaylist(videoListId : String,nextPageToken : String){
-        repository.getNextVideoListFromPlaylist(nextPageToken,videoListId)
+    fun getNextVideoListFromPlaylist(videoListId : String,nextPageToken : String): LiveData<Resource<PlaylistInfo>>{
+        return repository.getNextVideoListFromPlaylist(nextPageToken,videoListId)
     }
 
 }

@@ -6,11 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import com.tilek.youtubeparser.R
+import com.tilek.youtubeparser.data.models.PlaylistInfo
 import com.tilek.youtubeparser.data.models.PlaylistItem
+import com.tilek.youtubeparser.data.network.Resource
 import com.tilek.youtubeparser.data.network.Status
+import com.tilek.youtubeparser.extensions.gone
 import com.tilek.youtubeparser.extensions.loadImage
+import com.tilek.youtubeparser.extensions.logger
+import com.tilek.youtubeparser.extensions.visible
 import com.tilek.youtubeparser.ui.details.adapter.DetailAdapter
 import com.tilek.youtubeparser.ui.playlists.PlaylistFragment
 import com.tilek.youtubeparser.ui.playlists.playlistAdapter.OnPlaylistClickListener
@@ -43,6 +49,7 @@ class DetailsFragment : Fragment(), OnPlaylistClickListener{
         initView()
         initRecycler()
         fetchData()
+        pagging()
     }
 
     private fun initView() {
@@ -56,13 +63,41 @@ class DetailsFragment : Fragment(), OnPlaylistClickListener{
 
     private fun fetchData() {
         viewModel.getVideoListFromPlaylist(videoList.id.toString()).observe(viewLifecycleOwner, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it?.data?.items?.let { it1 -> adapter.add(it1) }
-                    nextPageToken = it?.data?.nextPageToken
+            statusCheck(it)
+        })
+    }
+
+    private fun pagging() {
+        nested_scroll_video.setOnScrollChangeListener { nested: NestedScrollView, scrollX, scrollY, oldScrollX, oldScrollY ->
+            if (scrollY == nested.getChildAt(0).measuredHeight - nested.measuredHeight) {
+                if (nextPageToken != null) {
+                    fetchNextData(nextPageToken!!)
                 }
             }
+        }
+    }
+
+    private fun fetchNextData(nextPageToken: String) {
+        viewModel.getNextVideoListFromPlaylist(videoList.id.toString(),nextPageToken).observe(viewLifecycleOwner, Observer {
+            if (it?.data?.nextPageToken == null) {
+                this.nextPageToken = null
+            }
+            statusCheck(it)
         })
+    }
+
+    private fun setData(resource : Resource<PlaylistInfo>){
+        resource.data?.items?.let { it1 -> adapter.add(it1) }
+        nextPageToken = resource.data?.nextPageToken
+        progress_bar.gone()
+    }
+
+    private fun statusCheck(resource : Resource<PlaylistInfo>){
+        when (resource.status) {
+            Status.SUCCESS -> setData(resource)
+            Status.LOADING -> progress_bar.visible()
+            Status.ERROR -> logger("error",resource.message.toString())
+        }
     }
 
     override fun onClick(item: PlaylistItem) {

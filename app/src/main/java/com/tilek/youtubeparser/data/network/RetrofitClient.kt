@@ -5,26 +5,24 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-const val BASE_URL = "https://www.googleapis.com/"
-
 class RetrofitClient {
 
     companion object {
-        private val okHttpClient: OkHttpClient =
-            OkHttpClient().newBuilder() //для ограничения времени
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .build()
+//        private val okHttpClient: OkHttpClient =
+//            OkHttpClient().newBuilder() //для ограничения времени
+//                .connectTimeout(60, TimeUnit.SECONDS)
+//                .readTimeout(60, TimeUnit.SECONDS)
+//                .writeTimeout(60, TimeUnit.SECONDS)
+//                .build()
 
-        private val retrofit: Retrofit = Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .build()
+//        private val retrofit: Retrofit = Retrofit.Builder()
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .baseUrl(BASE_URL)
+//            .client(okHttpClient)
+//            .build()
 
-        fun instanceRetrofit(): YouTubeApi {
-            return retrofit.create(YouTubeApi::class.java)
-        }
+//        fun instanceRetrofit(): YouTubeApi {
+//            return retrofit.create(YouTubeApi::class.java)
+//        }
     }
 }

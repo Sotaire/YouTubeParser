@@ -2,6 +2,7 @@ package com.tilek.youtubeparser.data.network
 
 import com.tilek.youtubeparser.data.models.PlaylistInfo
 import retrofit2.Call
+import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -41,4 +42,10 @@ interface YouTubeApi {
         @Query("pageToken") nextPageToken : String? = null
     ) : PlaylistInfo
 
+
+    companion object{
+        fun provideYoutubeApi(retrofit: Retrofit) : YouTubeApi{
+                return retrofit.create(YouTubeApi::class.java)
+        }
+    }
 }

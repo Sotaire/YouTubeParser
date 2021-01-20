@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import com.tilek.youtubeparser.R
+import com.tilek.youtubeparser.core.BaseFragment
 import com.tilek.youtubeparser.data.models.PlaylistInfo
 import com.tilek.youtubeparser.data.models.PlaylistItem
 import com.tilek.youtubeparser.data.network.Resource
@@ -21,35 +22,34 @@ import com.tilek.youtubeparser.ui.details.adapter.DetailAdapter
 import com.tilek.youtubeparser.ui.playlists.PlaylistFragment
 import com.tilek.youtubeparser.ui.playlists.playlistAdapter.OnPlaylistClickListener
 import kotlinx.android.synthetic.main.details_fragment.*
+import org.koin.android.architecture.ext.getViewModel
+import org.koin.android.ext.android.inject
+import org.koin.java.KoinJavaComponent.inject
 
-class DetailsFragment : Fragment(), OnPlaylistClickListener{
+class DetailsFragment : BaseFragment<DetailsViewModel>(R.layout.details_fragment), OnPlaylistClickListener{
 
-    private lateinit var viewModel: DetailsViewModel
     private lateinit var videoList : PlaylistItem
     private lateinit var adapter : DetailAdapter
     private var nextPageToken: String? = null
+
+    override fun getViewModule(): DetailsViewModel =
+            inject<DetailsViewModel>().value
+
+    override fun setUpView() {
+        initView()
+        initRecycler()
+        fetchData()
+        pagging()
+    }
+
+    override fun setUpViewModelObs() {
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             videoList = it.getSerializable(PlaylistFragment.PLAYLIST_ITEM) as PlaylistItem
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.details_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(DetailsViewModel::class.java)
-        initView()
-        initRecycler()
-        fetchData()
-        pagging()
     }
 
     private fun initView() {
@@ -62,7 +62,7 @@ class DetailsFragment : Fragment(), OnPlaylistClickListener{
     }
 
     private fun fetchData() {
-        viewModel.getVideoListFromPlaylist(videoList.id.toString()).observe(viewLifecycleOwner, Observer {
+        mViewModule!!.getVideoListFromPlaylist(videoList.id.toString()).observe(viewLifecycleOwner, Observer {
             statusCheck(it)
         })
     }
@@ -78,7 +78,7 @@ class DetailsFragment : Fragment(), OnPlaylistClickListener{
     }
 
     private fun fetchNextData(nextPageToken: String) {
-        viewModel.getNextVideoListFromPlaylist(videoList.id.toString(),nextPageToken).observe(viewLifecycleOwner, Observer {
+        mViewModule!!.getNextVideoListFromPlaylist(videoList.id.toString(),nextPageToken).observe(viewLifecycleOwner, Observer {
             if (it?.data?.nextPageToken == null) {
                 this.nextPageToken = null
             }

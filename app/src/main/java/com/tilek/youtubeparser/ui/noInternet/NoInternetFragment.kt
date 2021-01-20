@@ -9,27 +9,18 @@ import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.navigateUp
 import com.tilek.youtubeparser.R
+import com.tilek.youtubeparser.core.BaseFragment
 import com.tilek.youtubeparser.extensions.getConnectivityManager
 import com.tilek.youtubeparser.extensions.isInternetConnected
 import com.tilek.youtubeparser.extensions.showToast
 import kotlinx.android.synthetic.main.fragment_no_internet.*
+import org.koin.android.ext.android.inject
 
 
-class NoInternetFragment : Fragment() {
+class NoInternetFragment : BaseFragment<NoInternetViewModel>(R.layout.fragment_no_internet) {
 
     companion object {
         const val OFFLINE_STATE = "offline_state"
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_no_internet, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        isOnline()
-        offline()
     }
 
     private fun offline() {
@@ -48,5 +39,15 @@ class NoInternetFragment : Fragment() {
                 context?.showToast("No internet")
             }
         }
+    }
+
+    override fun getViewModule(): NoInternetViewModel = inject<NoInternetViewModel>().value
+
+    override fun setUpView() {
+        isOnline()
+        offline()
+    }
+
+    override fun setUpViewModelObs() {
     }
 }

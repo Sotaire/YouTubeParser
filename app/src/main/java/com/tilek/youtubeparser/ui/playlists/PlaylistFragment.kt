@@ -8,6 +8,8 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
 import com.tilek.youtubeparser.R
 import com.tilek.youtubeparser.core.BaseFragment
 import com.tilek.youtubeparser.data.models.PlaylistInfo
@@ -116,5 +118,19 @@ class PlaylistFragment : BaseFragment<PlaylistViewModel>(R.layout.playlist_fragm
         } else {
             findNavController().navigate(R.id.action_playlistFragment_to_noInternetFragment)
         }
+    }
+
+    override fun onInitializationSuccess(
+        p0: YouTubePlayer.Provider?,
+        player: YouTubePlayer?,
+        wasRestored: Boolean
+    ) {
+
+    }
+
+    override fun onInitializationFailure(
+        p0: YouTubePlayer.Provider?,
+        errorReason: YouTubeInitializationResult?
+    ) {
     }
 }

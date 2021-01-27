@@ -1,7 +1,6 @@
 package com.tilek.youtubeparser.data.repository
 
 import androidx.lifecycle.liveData
-import com.tilek.youtubeparser.data.local.YoutubeDao
 import com.tilek.youtubeparser.data.local.YoutubeDataBase
 import com.tilek.youtubeparser.data.models.PlaylistItem
 import com.tilek.youtubeparser.data.models.VideoListItem
@@ -11,8 +10,11 @@ import kotlinx.coroutines.Dispatchers
 
 class YoutubeRepository(private var api: YouTubeApi,private var database: YoutubeDataBase) {
 
+    companion object {
+        const val YOUTUBE_API_KEY = "AIzaSyDr7WJvkOUCrqvY6dsVmV9hjCpxG-EYbiI"
+    }
+
     val channelId = "UC8M5YVWQan_3Elm-URehz9w"
-    val key = "AIzaSyDr7WJvkOUCrqvY6dsVmV9hjCpxG-EYbiI"
     val part = "snippet,contentDetails"
     val maxResults = 8
 
@@ -35,7 +37,7 @@ class YoutubeRepository(private var api: YouTubeApi,private var database: Youtub
     fun getPlaylists() = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = api.getPlaylists(part, channelId, key,maxResults)))
+            emit(Resource.success(data = api.getPlaylists(part, channelId, YOUTUBE_API_KEY,maxResults)))
         }catch (e : Exception){
             emit(Resource.error(data = null,message = e.message.toString()))
         }
@@ -44,7 +46,7 @@ class YoutubeRepository(private var api: YouTubeApi,private var database: Youtub
     fun getNextPlaylists(nextPageToken : String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = api.getNextPlaylists(part, channelId, key,maxResults,nextPageToken)))
+            emit(Resource.success(data = api.getNextPlaylists(part, channelId, YOUTUBE_API_KEY,maxResults,nextPageToken)))
         }catch (e : Exception){
             emit(Resource.error(data = null,message = e.message.toString()))
         }
@@ -53,7 +55,7 @@ class YoutubeRepository(private var api: YouTubeApi,private var database: Youtub
     fun getVideoListFromPlaylist(videoListId : String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = api.getVideoListFromPlaylist(part, videoListId, key,maxResults)))
+            emit(Resource.success(data = api.getVideoListFromPlaylist(part, videoListId, YOUTUBE_API_KEY,maxResults)))
         }catch (e : Exception){
             emit(Resource.error(data = null,message = e.message.toString()))
         }
@@ -62,7 +64,7 @@ class YoutubeRepository(private var api: YouTubeApi,private var database: Youtub
     fun getNextVideoListFromPlaylist(nextPageToken : String,videoListId : String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = api.getNextVideoListFromPlaylist(part, videoListId, key,maxResults,nextPageToken)))
+            emit(Resource.success(data = api.getNextVideoListFromPlaylist(part, videoListId, YOUTUBE_API_KEY,maxResults,nextPageToken)))
         }catch (e : Exception){
             emit(Resource.error(data = null,message = e.message.toString()))
         }

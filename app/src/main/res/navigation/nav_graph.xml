@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_detailsFragment_to_noInternetFragment"
             app:destination="@id/noInternetFragment" />
+        <action
+            android:id="@+id/action_detailsFragment_to_videoDetailFragment"
+            app:destination="@id/videoDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/noInternetFragment"
@@ -38,4 +41,9 @@
             android:id="@+id/action_noInternetFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/videoDetailFragment"
+        android:name="com.tilek.youtubeparser.ui.video.VideoDetailFragment"
+        android:label="video_detail_fragment"
+        tools:layout="@layout/video_detail_fragment" />
 </navigation>

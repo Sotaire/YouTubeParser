@@ -1,30 +1,26 @@
 package com.tilek.youtubeparser.ui.details
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
 import com.tilek.youtubeparser.R
 import com.tilek.youtubeparser.core.BaseFragment
 import com.tilek.youtubeparser.data.models.PlaylistInfo
 import com.tilek.youtubeparser.data.models.PlaylistItem
 import com.tilek.youtubeparser.data.network.Resource
 import com.tilek.youtubeparser.data.network.Status
-import com.tilek.youtubeparser.extensions.gone
-import com.tilek.youtubeparser.extensions.loadImage
-import com.tilek.youtubeparser.extensions.logger
-import com.tilek.youtubeparser.extensions.visible
+import com.tilek.youtubeparser.extensions.*
 import com.tilek.youtubeparser.ui.details.adapter.DetailAdapter
 import com.tilek.youtubeparser.ui.playlists.PlaylistFragment
 import com.tilek.youtubeparser.ui.playlists.playlistAdapter.OnPlaylistClickListener
+import com.tilek.youtubeparser.ui.video.VideoActivity
+import com.tilek.youtubeparser.ui.video.VideoDetailFragment
 import kotlinx.android.synthetic.main.details_fragment.*
-import org.koin.android.architecture.ext.getViewModel
 import org.koin.android.ext.android.inject
-import org.koin.java.KoinJavaComponent.inject
 
 class DetailsFragment : BaseFragment<DetailsViewModel>(R.layout.details_fragment), OnPlaylistClickListener{
 
@@ -101,7 +97,27 @@ class DetailsFragment : BaseFragment<DetailsViewModel>(R.layout.details_fragment
     }
 
     override fun onClick(item: PlaylistItem) {
+        if (isInternetConnected(getConnectivityManager(requireContext()))) {
+            val intent : Intent = Intent(requireContext(),VideoActivity :: class.java)
+            intent.putExtra(VideoActivity.VIDEO_ITEM, item)
+            requireActivity().startActivity(intent)
+//            findNavController().navigate(R.id.action_detailsFragment_to_videoDetailFragment, bundle)
+        } else {
+            findNavController().navigate(R.id.action_playlistFragment_to_noInternetFragment)
+        }
+    }
 
+    override fun onInitializationSuccess(
+        p0: YouTubePlayer.Provider?,
+        player: YouTubePlayer?,
+        wasRestored: Boolean
+    ) {
+    }
+
+    override fun onInitializationFailure(
+        p0: YouTubePlayer.Provider?,
+        errorReason: YouTubeInitializationResult?
+    ) {
     }
 
 }

@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.navigateUp
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
 import com.tilek.youtubeparser.R
 import com.tilek.youtubeparser.core.BaseFragment
 import com.tilek.youtubeparser.extensions.getConnectivityManager
@@ -49,5 +51,19 @@ class NoInternetFragment : BaseFragment<NoInternetViewModel>(R.layout.fragment_n
     }
 
     override fun setUpViewModelObs() {
+    }
+
+    override fun onInitializationSuccess(
+        p0: YouTubePlayer.Provider?,
+        player: YouTubePlayer?,
+        wasRestored: Boolean
+    ) {
+
+    }
+
+    override fun onInitializationFailure(
+        p0: YouTubePlayer.Provider?,
+        errorReason: YouTubeInitializationResult?
+    ) {
     }
 }
